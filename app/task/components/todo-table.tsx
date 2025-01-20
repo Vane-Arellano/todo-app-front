@@ -13,20 +13,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, PlusCircleIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -35,17 +23,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { DataTableToolbar } from "./toolbar/data-table-toolbar"
+import TableColumns from "../data/columns"
+import { AlertDelete } from "./dialog/confirm-delete"
 
 
-export const DataTable = ({data, columns}: {data: any, columns: any}) => {
+
+export const TasksTable = ({data}: {data: any}) => {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+    React.useState<VisibilityState>({
+      status: false
+    })
   const [rowSelection, setRowSelection] = React.useState({})
-
+  const columns = TableColumns(); 
+  
   const table = useReactTable({
     data,
     columns,
@@ -66,20 +61,8 @@ export const DataTable = ({data, columns}: {data: any, columns: any}) => {
   })
 
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter tasks..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <Button variant="outline" className="ml-auto">
-         <PlusCircleIcon/>  New To-Do 
-        </Button>
-      </div>
+    <div className="grid w-full gap-8">
+      <DataTableToolbar table={table}/>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -154,6 +137,7 @@ export const DataTable = ({data, columns}: {data: any, columns: any}) => {
           </Button>
         </div>
       </div>
+      <AlertDelete/>
     </div>
   )
 }
