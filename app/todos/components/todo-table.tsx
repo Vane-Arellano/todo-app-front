@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -36,7 +35,10 @@ export const TasksTable = ({data}: {data: any}) => {
   )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
-      status: false
+      done: false,
+      id: false,
+      doneDate: false, 
+      creationDate: false
     })
   const [rowSelection, setRowSelection] = React.useState({})
   const columns = TableColumns(); 
@@ -59,7 +61,6 @@ export const TasksTable = ({data}: {data: any}) => {
       rowSelection,
     },
   })
-
   return (
     <div className="grid w-full gap-8">
       <DataTableToolbar table={table}/>
@@ -88,7 +89,8 @@ export const TasksTable = ({data}: {data: any}) => {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() || row.getValue('done') === 'true' && "selected"}
+                  className={row.getIsSelected() || row.getValue('done') === 'true' ? "line-through opacity-50" : ""}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -116,7 +118,7 @@ export const TasksTable = ({data}: {data: any}) => {
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredRowModel().rows.length} to-do(s) done.
         </div>
         <div className="space-x-2">
           <Button

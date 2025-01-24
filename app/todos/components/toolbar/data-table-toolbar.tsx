@@ -31,7 +31,7 @@ export function DataTableToolbar<TData>({
         />
         {table.getColumn("select") && (
             <DataTableFacetedFilter
-                column={table.getColumn("status")}
+                column={table.getColumn("done")}
                 title="Status"
                 options={statuses}
             />

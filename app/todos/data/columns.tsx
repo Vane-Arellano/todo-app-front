@@ -12,30 +12,64 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useDispatch } from "react-redux"
-import { openEdit, openDelete } from "@/redux/store"
+import { useDispatch, useSelector } from "react-redux"
+import { openEdit, openDelete, changeStatus, RootState } from "@/redux/store"
+import { changeTodoStatus } from "../service/todos"
+import { toast } from "sonner"
 
-// This type is used to define the shape of our data.
 export type Task = {
-  id: string,
-  name: string
-  priority: "low" | "medium" | "high"
-  due: Date,
-  status: string
+  id: string;
+  name: string;
+  priority: string;
+  dueDate: string | null;
+  done: boolean; 
+  doneDate: string | null; 
+  creationDate: string;
 }
 
 const TableColumns = () => {
   const dispatch = useDispatch();
+  const todos = useSelector((state: RootState) => state.todos.todos)
 
-  const handleOpenEdit = () => {
-    dispatch(openEdit())
+  const handleOpenEdit = (id: String) => {
+    const todoToEdit = todos.find(todo => todo.id === id);
+
+    if (todoToEdit){
+      dispatch(openEdit(id))
+    }
+    else {
+      toast('Something went wrong, try again')
+    }
   }
 
   const handleOpenDelete = () => {
     dispatch(openDelete())
   }
 
+  const handleStatusChange = (id : String) => {
+    changeTodoStatus(id) // call to the API to change the status
+    dispatch(changeStatus({id})) // call to store reducer to change status without having to reload page
+  }
+
   const columns: ColumnDef<Task>[] = [
+    {
+      accessorKey: "id", 
+      header: "id"
+    },
+    {
+      accessorKey: "creationDate", 
+      header: "creation date"
+    }, 
+    {
+      accessorKey: "doneDate",
+      header: "done date"
+
+    },
+    {
+      accessorKey: 'done', 
+      header: 'done',
+
+    },
     {
       id: "select",
       header: ({ table }) => (
@@ -50,8 +84,11 @@ const TableColumns = () => {
       ),
       cell: ({ row }) => (
         <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          checked={row.getIsSelected() || row.getValue('done') === 'true'}
+          onCheckedChange={(value) => {
+            row.toggleSelected(!!value)
+            handleStatusChange(row.getValue('id'))
+          }}
           aria-label="Select row"
         />
       ),
@@ -73,10 +110,13 @@ const TableColumns = () => {
           </Button>
         )
       },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("priority")}</div>,
+      cell: ({ row }) => 
+        <div className="lowercase">
+          {row.getValue("priority") == '0' ? 'low' : row.getValue("priority") == '1' ? "medium" : "high"}
+        </div>,
     },
     {
-      accessorKey: "due",
+      accessorKey: "dueDate",
       header: ({ column }) => {
         return (
           <Button
@@ -87,6 +127,10 @@ const TableColumns = () => {
             <ArrowUpDown />
           </Button>
         )
+      },
+      cell: ({ row }) => {
+        const dueDate = new Date(row.getValue("dueDate"));
+        return <div>{dueDate.toLocaleDateString()}</div>;
       },
     },
     {
@@ -103,7 +147,7 @@ const TableColumns = () => {
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Action</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-primary" onClick={handleOpenEdit}>
+              <DropdownMenuItem className="text-primary" onClick={() => {handleOpenEdit(row.getValue('id'))}}>
                 <Edit />
                 Edit
               </DropdownMenuItem>
@@ -116,10 +160,6 @@ const TableColumns = () => {
         );
       },
     },
-    {
-      accessorKey: 'status', 
-      header: 'Status'
-    }
   ];
 
   return columns;
