@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux';
-import { addTodo, restartTodoValues, RootState } from "@/redux/store";
+import { addTodo, restartTodoValues, RootState, triggerTodoAdded } from "@/redux/store";
 import { placeName } from "@/redux/store"
 import { createNewTodo } from "../../service/todos"
 import { toast } from "sonner"
@@ -40,17 +40,18 @@ export function DialogDemo() {
     if (debouncedName) {
       dispatch(placeName(debouncedName));  // Dispatch only after debouncing
     }
-  }, [debouncedName]);
+  }, [debouncedName, dispatch]);
 
   const handleSaveTodo = async () => {
     if (newTodo.name != '' && newTodo.priority != ''){
       const todo = await createNewTodo(newTodo)
       dispatch(addTodo(todo))
+      dispatch(triggerTodoAdded())
       setOpen(false)
+
 
     }
     else {
-      console.log('enters here')
       toast("Please fill all fields marked with *")
     }
 
@@ -84,7 +85,7 @@ export function DialogDemo() {
             <Label htmlFor="username" className="text-right">
               Priority *
             </Label>
-            <SelectDemo prevPriority=""/>
+            <SelectDemo prevPriority=''/>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="duedate" className="text-right">

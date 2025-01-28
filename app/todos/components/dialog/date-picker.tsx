@@ -23,9 +23,9 @@ export function DatePickerDemo({prevDate} : {prevDate: Date | undefined}) {
 
   useEffect(() => {
     if (date){
-      dispatch(placeDueDate(date))
+      dispatch(placeDueDate(date.toISOString()))
     }
-  }, [date])
+  }, [date, dispatch])
 
   return (
     <Popover>

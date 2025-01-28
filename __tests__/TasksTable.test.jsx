@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { TasksTable } from '../app/task/components/todo-table'
+import { TasksTable } from '../app/todos/components/todo-table'
 import { Button } from '@/components/ui/button' // Ensure Button is imported correctly
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowUpDown, Edit, MoreHorizontal, Trash } from "lucide-react"
@@ -12,90 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-const mockColumns = [
-    {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-      },
-      {
-        accessorKey: "name", 
-        header: "Name"
-      },
-      {
-        accessorKey: "priority", 
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Priority
-              <ArrowUpDown />
-            </Button>
-          )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("priority")}</div>,
-      }, 
-      {
-        accessorKey: "due",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Due Date
-              <ArrowUpDown />
-            </Button>
-          )
-        },
-      },
-      {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-          const payment = row.original
-     
-          return (
-            <DropdownMenu>
-          <DropdownMenuTrigger asChild >
-            <Button variant="ghost">
-              <MoreHorizontal/>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Action</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-primary">
-              <Edit />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">
-              <Trash />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-          )
-        }
-      },
-]
+import { Provider } from 'react-redux'
+import TableColumns from '../app/todos/data/columns'
 
 const mockData = [
     {
@@ -111,10 +29,25 @@ const mockData = [
         due_date: new Date(),
     },
 ]
+const mockColumns = TableColumns();
+const mockStore = configureStore();
+
+const store = mockStore({
+  todos: {
+    todos: [], // Mock any state you need here
+    isTodoAdded: false,
+  },
+  // add other slice states if needed
+});
+
 
 describe('DataTable Component', () => {
   test('renders table headers and data rows', () => {
-    render(<TasksTable data={mockData} columns={mockColumns} />)
+    render(
+      <Provider store={store}>
+        <TasksTable data={mockData} columns={mockColumns} />
+      </Provider>
+  )
 
     // Check if table headers are rendered
     expect(screen.getByText(/Name/i)).toBeInTheDocument()

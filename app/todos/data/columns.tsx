@@ -1,9 +1,7 @@
-"use client"
-
-import { ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Button } from "@/components/ui/button"
-import { ArrowUpDown, Edit, MoreHorizontal, Trash } from "lucide-react"
+import { ColumnDef } from "@tanstack/react-table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown, Edit, MoreHorizontal, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,67 +9,73 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useDispatch, useSelector } from "react-redux"
-import { openEdit, openDelete, changeStatus, RootState } from "@/redux/store"
-import { changeTodoStatus } from "../service/todos"
-import { toast } from "sonner"
+} from "@/components/ui/dropdown-menu";
+import { useDispatch, useSelector } from "react-redux";
+import { openEdit, openDelete, changeStatus, RootState } from "@/redux/store";
+import { changeTodoStatus } from "../service/todos";
+import { toast } from "sonner";
 
 export type Task = {
   id: string;
   name: string;
   priority: string;
   dueDate: string | null;
-  done: boolean; 
-  doneDate: string | null; 
+  done: string; 
+  doneDate: string | null;
   creationDate: string;
-}
+};
 
 const TableColumns = () => {
   const dispatch = useDispatch();
-  const todos = useSelector((state: RootState) => state.todos.todos)
+  const todos = useSelector((state: RootState) => state.todos.todos);
 
-  const handleOpenEdit = (id: String) => {
-    const todoToEdit = todos.find(todo => todo.id === id);
+  const handleOpenEdit = (id: string) => {
+    const todoToEdit = todos.find((todo) => todo.id === id);
 
-    if (todoToEdit){
-      dispatch(openEdit(id))
+    if (todoToEdit) {
+      dispatch(openEdit(id));
+    } else {
+      toast('Something went wrong, try again');
     }
-    else {
-      toast('Something went wrong, try again')
+  };
+
+  const handleOpenDelete = (id: string) => {
+    dispatch(openDelete(id));
+  };
+
+  const handleStatusChange = async (id: string) => {
+    try {
+      await changeTodoStatus(id);
+  
+      dispatch(changeStatus({ id }));
+  
+      toast.success("Status updated!");
+    } catch (error) {
+      console.error("Failed to update status", error);
+      toast.error("Failed to update status, try again.");
     }
-  }
-
-  const handleOpenDelete = () => {
-    dispatch(openDelete())
-  }
-
-  const handleStatusChange = (id : String) => {
-    changeTodoStatus(id) // call to the API to change the status
-    dispatch(changeStatus({id})) // call to store reducer to change status without having to reload page
-  }
+  };
 
   const columns: ColumnDef<Task>[] = [
     {
-      accessorKey: "id", 
-      header: "id"
+      accessorKey: "id",
+      header: "id",
     },
     {
-      accessorKey: "creationDate", 
-      header: "creation date"
-    }, 
+      accessorKey: "creationDate",
+      header: "creation date",
+    },
     {
       accessorKey: "doneDate",
-      header: "done date"
-
+      header: "done date",
     },
     {
-      accessorKey: 'done', 
-      header: 'done',
-
+      accessorKey: "done",
+      header: "done",
     },
     {
       id: "select",
+      accessorKey: "select",
       header: ({ table }) => (
         <Checkbox
           checked={
@@ -84,21 +88,22 @@ const TableColumns = () => {
       ),
       cell: ({ row }) => (
         <Checkbox
-          checked={row.getIsSelected() || row.getValue('done') === 'true'}
+          checked={row.getIsSelected() || row.getValue("done") === 'true'}
           onCheckedChange={(value) => {
-            row.toggleSelected(!!value)
-            handleStatusChange(row.getValue('id'))
+            console.log('On checked change value ', value )
+            row.toggleSelected(!!value);
+            handleStatusChange(row.getValue("id"));
           }}
           aria-label="Select row"
         />
       ),
     },
     {
-      accessorKey: "name", 
-      header: "Name"
+      accessorKey: "name",
+      header: "Name",
     },
     {
-      accessorKey: "priority", 
+      accessorKey: "priority",
       header: ({ column }) => {
         return (
           <Button
@@ -108,12 +113,17 @@ const TableColumns = () => {
             Priority
             <ArrowUpDown />
           </Button>
-        )
+        );
       },
-      cell: ({ row }) => 
+      cell: ({ row }) => (
         <div className="lowercase">
-          {row.getValue("priority") == '0' ? 'low' : row.getValue("priority") == '1' ? "medium" : "high"}
-        </div>,
+          {row.getValue("priority") === '0'
+            ? "low"
+            : row.getValue("priority") === '1'
+            ? "medium"
+            : "high"}
+        </div>
+      ),
     },
     {
       accessorKey: "dueDate",
@@ -126,11 +136,11 @@ const TableColumns = () => {
             Due Date
             <ArrowUpDown />
           </Button>
-        )
+        );
       },
       cell: ({ row }) => {
         const dueDate = new Date(row.getValue("dueDate"));
-        return <div>{dueDate.toLocaleDateString()}</div>;
+        return <div>{row.getValue("dueDate")? dueDate.toLocaleDateString() : ''}</div>;
       },
     },
     {
@@ -138,25 +148,33 @@ const TableColumns = () => {
       enableHiding: false,
       cell: ({ row }) => {
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Action</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-primary" onClick={() => {handleOpenEdit(row.getValue('id'))}}>
-                <Edit />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600" onClick={handleOpenDelete}>
-                <Trash />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          row.getValue("done") === "false" && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Action</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-primary"
+                  onClick={() => handleOpenEdit(row.getValue("id"))}
+                >
+                  <Edit />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-red-600"
+                  onClick={() => handleOpenDelete(row.getValue("id"))}
+                >
+                  <Trash />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )
         );
       },
     },

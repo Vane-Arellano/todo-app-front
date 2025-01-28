@@ -7,7 +7,7 @@ export default function Home() {
     <div className="">
       <main className="mx-56 my-10">
         <p className="text-4xl font-semibold text-primary">Welcome!</p>
-        <p className="text-2xl font-normal text-slate-400">Let's plan your tasks</p>
+        <p className="text-2xl font-normal text-slate-400">Let&apos;s plan your tasks</p>
         <TaskPage/>
         <MetricsSection/>
         <EditTaskDemo/> 

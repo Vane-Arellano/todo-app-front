@@ -1,5 +1,6 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+
 export interface Todo {
   id: string;
   name: string;
@@ -12,9 +13,11 @@ export interface Todo {
 
 interface TodosState {
   todos: Todo[];
+  isTodoAdded: boolean
 }
 const initialTodosState: TodosState = {
   todos: [],
+  isTodoAdded: false
 };
 
 const todosSlice = createSlice({
@@ -31,45 +34,41 @@ const todosSlice = createSlice({
       }));
     },
     addTodo: (state, action: PayloadAction<Todo>) => {
-      if (action.payload.dueDate){
-        const newTodo = {
-          ...action.payload,
-          dueDate: new Date(action.payload.dueDate).toISOString(),
-        };
-      }
       state.todos.push(action.payload); 
+    },
+    triggerTodoAdded: (state) => {
+      state.isTodoAdded = !state.isTodoAdded
     },
     editTodo: (state, action) => {
       const { id, name, priority, dueDate } = action.payload;
 
-      // Find the todo that matches the given id
       const todoIndex = state.todos.findIndex((todo) => todo.id === id);
 
       if (todoIndex !== -1) {
-        // Update the todo at the found index
         const updatedTodo = state.todos[todoIndex];
         updatedTodo.name = name;
-        updatedTodo.priority = priority === 'low' ? '0' : priority === 'medium' ? '1' : '2';
-        updatedTodo.dueDate = dueDate ? new Date(dueDate).toISOString() : null;
+        updatedTodo.priority = priority === "low" ? '0' : priority === "medium" ? '1' : '2';
+        updatedTodo.dueDate = dueDate ?? null;
       }
     },
     changeStatus: (state, action: PayloadAction<{ id: String }>) => {
       const { id } = action.payload;
-
       const todo = state.todos.find(todo => todo.id === id);
-
       if (todo && todo.done === 'true') {
         todo.done = 'false';
       }
       else {
         todo!.done = 'true';
       }
-
+    }, 
+    deleteTodoReducer: (state, action) => {
+      const id = action.payload
+      state.todos = state.todos.filter(todo => todo.id !== id);
     }
   },
 });
 
-export const { setTodos, addTodo, changeStatus, editTodo } = todosSlice.actions;
+export const { setTodos, addTodo, changeStatus, editTodo, deleteTodoReducer, triggerTodoAdded } = todosSlice.actions;
 
 export interface TodoBodyState { 
   name: string, 
@@ -94,7 +93,7 @@ const todoBodySlice = createSlice({
       state.priority = action.payload
     },
     placeDueDate: (state, action) => {
-      const newDueDate = new Date(action.payload).toISOString()
+      const newDueDate = action.payload
       state.dueDate = newDueDate
     }, 
     restartTodoValues: (state) => {
@@ -160,21 +159,25 @@ export const {openEdit, closeEdit} = editSlice.actions
 
 interface DeleteState {
   delete: boolean 
+  id: string
 }
 
 const initialDeleteState: DeleteState = {
-  delete: false
+  delete: false,
+  id: ''
 }
 
 const deleteSlice = createSlice({
   name: 'delete', 
   initialState: initialDeleteState, 
   reducers: {
-      openDelete: (state) => {
+      openDelete: (state, action) => {
         state.delete = true
+        state.id = action.payload
       }, 
       closeDelete: (state) => {
         state.delete = false 
+        state.id = ''
       }
   },
 })
@@ -222,7 +225,8 @@ const store = configureStore({
     delete: deleteSlice.reducer, 
     todoBody: todoBodySlice.reducer, 
     todos: todosSlice.reducer,
-    metrics: metricsSlice.reducer
+    metrics: metricsSlice.reducer, 
+    // pagination: paginationSlice.reducer
   },
 });
 

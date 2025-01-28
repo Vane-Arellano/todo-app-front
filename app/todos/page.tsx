@@ -7,7 +7,8 @@ import { getTodos } from "./service/todos";
 
 export default function TaskPage() {
   const dispatch = useDispatch();
-  const todos = useSelector((state: RootState) => state.todos);
+  const todos = useSelector((state: RootState) => state.todos.todos);
+  const isTodoAdded = useSelector((state: RootState) => state.todos.isTodoAdded);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function TaskPage() {
     };
 
     fetchTodos();
-  }, [dispatch]);
+  }, [dispatch, isTodoAdded]);
 
   if (loading) {
     return <div>Loading...</div>; 
@@ -27,7 +28,7 @@ export default function TaskPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <TasksTable data={todos.todos} /> 
+      <TasksTable data={todos}/> 
     </div>
   );
 }

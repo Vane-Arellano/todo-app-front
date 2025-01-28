@@ -8,12 +8,18 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
   } from "@/components/ui/alert-dialog"
-import { closeDelete, RootState } from "@/redux/store";
+import { closeDelete, deleteTodoReducer, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteTodo } from "../../service/todos";
   
   export function AlertDelete() {
     const deleteS = useSelector((state: RootState) => state.delete);
     const dispatch = useDispatch();
+
+    const handleDeleteTodo = async () => {
+      dispatch(deleteTodoReducer(deleteS.id))
+      await deleteTodo(deleteS.id)
+    }
     const handleCloseDelete = () => {
         dispatch(closeDelete());
     }
@@ -23,12 +29,12 @@ import { useDispatch, useSelector } from "react-redux";
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              You wont be able to undo this action and recover the task you're deleting.
+              You wont be able to undo this action and recover the task you&apos;re deleting.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={handleDeleteTodo}>Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

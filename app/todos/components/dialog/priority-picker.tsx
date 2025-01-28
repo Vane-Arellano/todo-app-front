@@ -21,7 +21,7 @@ export function SelectDemo({prevPriority}: {prevPriority: string}) {
     if (priority != ''){
       dispatch(placePriority(priority))
     }
-  }, [priority])
+  }, [priority, dispatch])
 
   const handlePriorityChange = (value: string) => {
     setPriority(value)

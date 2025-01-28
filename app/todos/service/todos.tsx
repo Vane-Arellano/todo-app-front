@@ -1,4 +1,4 @@
-import { TodoBodyState, Todo } from "@/redux/store";
+import { TodoBodyState } from "@/redux/store";
 
 export const getTodos = async () => {
     const api_url = process.env.NEXT_PUBLIC_API_URL
@@ -20,7 +20,7 @@ export const createNewTodo = async (newTodo: TodoBodyState) => {
     return todo
 }
 
-export const updateTodo = async (id : String, todoBody: TodoBodyState) => {
+export const updateTodo = async (id : string, todoBody: TodoBodyState) => {
     const api_url = process.env.NEXT_PUBLIC_API_URL
     const response = await fetch (`${api_url}/${id}`, {
         method: 'PUT', 
@@ -29,13 +29,23 @@ export const updateTodo = async (id : String, todoBody: TodoBodyState) => {
             'Content-Type': 'application/json'
         }
     })
+    return response.ok
 }
 
-export const changeTodoStatus = async (id: String) => {
+export const changeTodoStatus = async (id: string) => {
     const api_url = process.env.NEXT_PUBLIC_API_URL
     const response = await fetch (`${api_url}/${id}/changeStatus`, {
         method: 'PUT', 
     }); 
     const itChanged = response.ok
     return itChanged
+}
+
+export const deleteTodo = async (id: string) => {
+    const api_url = process.env.NEXT_PUBLIC_API_URL
+    const response = await fetch (`${api_url}/${id}`, {
+        method: 'DELETE', 
+    })
+
+    return response.ok
 }

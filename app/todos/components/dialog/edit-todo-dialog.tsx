@@ -13,7 +13,7 @@ import { SelectDemo } from "./priority-picker"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useSelector, useDispatch } from "react-redux"
-import { editTodo, placeName, RootState } from "@/redux/store"
+import { editTodo, placeName, restartTodoValues, RootState, Todo } from "@/redux/store"
 import { closeEdit } from "@/redux/store" 
 import { useEffect, useState } from "react"
 import { updateTodo } from "../../service/todos"
@@ -28,12 +28,15 @@ export function EditTaskDemo() {
   const [dueDate, setDueDate] = useState<Date>();
   const dispatch = useDispatch();
 
-  let todoToEdit: any  = todos.find(todo => todo.id === edit.id);
+  const todoToEdit: Todo | undefined  = todos.find(todo => todo.id === edit.id);
 
   useEffect(() => {
     if (todoToEdit) {
       setName(todoToEdit.name)
-      setPriority(todoToEdit.priority == '0' ? 'low' : todoToEdit.priority == '1' ? 'medium' : 'high')
+      setPriority(
+        todoToEdit.priority == '0' 
+        ? "low" : todoToEdit.priority == '1' 
+        ? "medium" : "high")
       setDueDate(new Date(todoToEdit.dueDate ?? ''))
     }
   }, [todoToEdit])
@@ -58,15 +61,15 @@ export function EditTaskDemo() {
     else {
       toast('Something went wrong, please fill all fields marked with *')
     }
+
+    dispatch(restartTodoValues());
+    
   }
 
   const handleCloseEdit = () => {
     dispatch(closeEdit());
   }
 
-  // for this component we must obtain the todo id so we can populate the dialog with the info of that todo 
-  // once the user clicks on save to-do handle the save by updating the todo on the redux store
-  // once updated, pass the info to the endpoint
   return (
     <>{
       edit && (
