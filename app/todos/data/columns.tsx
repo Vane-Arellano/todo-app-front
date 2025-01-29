@@ -1,4 +1,4 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Table } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, Edit, MoreHorizontal, Trash } from "lucide-react";
@@ -44,6 +44,7 @@ const TableColumns = () => {
   };
 
   const handleStatusChange = async (id: string) => {
+    console.log('gets here')
     try {
       await changeTodoStatus(id);
   
@@ -53,6 +54,25 @@ const TableColumns = () => {
       toast.error("Failed to update status, try again.");
     }
   };
+
+  const handleMultipleStatusChange = (value: string | boolean, table : Table<Task>) => {
+    if(!!value === true){
+      table.toggleAllPageRowsSelected(!!value)
+      setTimeout(() => {
+        const selectedRows = table.getFilteredSelectedRowModel().rows
+        const selectedIds: string[] = selectedRows.map((row) => row.getValue("id")); 
+        selectedIds.forEach((id) => handleStatusChange(id))
+      }, 0)
+    } else {
+      const selectedRows = table.getFilteredSelectedRowModel().rows
+      const selectedIds: string[] = selectedRows.map((row) => row.getValue("id")); 
+      selectedIds.forEach((id) => handleStatusChange(id))
+      setTimeout(() => {
+        table.toggleAllPageRowsSelected(!!value)
+      }, 0)
+    }
+    
+  }
 
   const columns: ColumnDef<Task>[] = [
     {
@@ -77,11 +97,13 @@ const TableColumns = () => {
       header: ({ table }) => {
         return(
           <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => {
+              handleMultipleStatusChange(value, table)
+            }}
             aria-label="Select all"
           />
         )
