@@ -25,8 +25,9 @@ export function EditTaskDemo() {
   const editTodoSelector = useSelector((state: RootState) => state.todoBody)
   const [name, setName] = useState(''); 
   const [priority, setPriority] = useState<"low" | "medium" | "high">();
-  const [dueDate, setDueDate] = useState<Date>();
+  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
   const dispatch = useDispatch();
+
 
   const todoToEdit: Todo | undefined  = todos.find(todo => todo.id === edit.id);
 
@@ -37,7 +38,9 @@ export function EditTaskDemo() {
         todoToEdit.priority == '0' 
         ? "low" : todoToEdit.priority == '1' 
         ? "medium" : "high")
-      setDueDate(new Date(todoToEdit.dueDate ?? ''))
+      if (todoToEdit.dueDate !== null) {
+        setDueDate(new Date(todoToEdit.dueDate))
+      }
     }
   }, [todoToEdit])
 
@@ -102,7 +105,7 @@ export function EditTaskDemo() {
                 <Label htmlFor="duedate" className="text-right">
                   Due Date
                 </Label>
-                <DatePickerDemo prevDate={dueDate}/>
+                <DatePickerDemo prevDate={dueDate ?? undefined}/>
               </div>
             </div>
             <DialogFooter>

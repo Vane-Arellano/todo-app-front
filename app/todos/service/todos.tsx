@@ -1,8 +1,8 @@
 import { TodoBodyState } from "@/redux/store";
 
-export const getTodos = async () => {
+export const getTodos = async (page: number) => {
     const api_url = process.env.NEXT_PUBLIC_API_URL
-    const response = await fetch(`${api_url}`); 
+    const response = await fetch(`${api_url}?page=${page}&size=10`); 
     const todos = await response.json(); 
     return todos
 }

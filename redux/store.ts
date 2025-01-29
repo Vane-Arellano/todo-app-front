@@ -1,5 +1,34 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+export interface Pagination {
+  pageIndex: number, 
+  totalPages: number, 
+  totalTodos: number
+}
+
+const initialPaginationState: Pagination = {
+  pageIndex: 0,
+  totalPages: 0,
+  totalTodos: 0
+}
+
+const paginationSlice = createSlice({
+  name: 'pagination', 
+  initialState: initialPaginationState, 
+  reducers: {
+    setPagination: (state, action) => {
+      state.pageIndex = action.payload
+    },
+    setTotalPages: (state, action) => {
+      state.totalPages = action.payload
+    }, 
+    setTotalTodos: (state, action) => {
+      state.totalTodos = action.payload
+    }
+  }
+})
+
+export const { setPagination, setTotalPages, setTotalTodos } = paginationSlice.actions
 
 export interface Todo {
   id: string;
@@ -34,7 +63,7 @@ const todosSlice = createSlice({
       }));
     },
     addTodo: (state, action: PayloadAction<Todo>) => {
-      state.todos.push(action.payload); 
+      state.todos.unshift(action.payload); 
     },
     triggerTodoAdded: (state) => {
       state.isTodoAdded = !state.isTodoAdded
@@ -226,7 +255,7 @@ const store = configureStore({
     todoBody: todoBodySlice.reducer, 
     todos: todosSlice.reducer,
     metrics: metricsSlice.reducer, 
-    // pagination: paginationSlice.reducer
+    pagination: paginationSlice.reducer
   },
 });
 

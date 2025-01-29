@@ -49,9 +49,7 @@ const TableColumns = () => {
   
       dispatch(changeStatus({ id }));
   
-      toast.success("Status updated!");
     } catch (error) {
-      console.error("Failed to update status", error);
       toast.error("Failed to update status, try again.");
     }
   };
@@ -76,21 +74,22 @@ const TableColumns = () => {
     {
       id: "select",
       accessorKey: "select",
-      header: ({ table }) => (
-        <Checkbox
+      header: ({ table }) => {
+        return(
+          <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
             (table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
+            aria-label="Select all"
+          />
+        )
+        },
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected() || row.getValue("done") === 'true'}
           onCheckedChange={(value) => {
-            console.log('On checked change value ', value )
             row.toggleSelected(!!value);
             handleStatusChange(row.getValue("id"));
           }}

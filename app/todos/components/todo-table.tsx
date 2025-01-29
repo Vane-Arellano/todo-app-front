@@ -11,7 +11,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 
-import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -24,6 +23,10 @@ import { DataTableToolbar } from "./toolbar/data-table-toolbar"
 import TableColumns from "../data/columns"
 import { AlertDelete } from "./dialog/confirm-delete"
 import { Todo } from "@/redux/store"
+import   PaginationControlsDataTable from "./pagination/pagination"
+import { useState } from "react"
+import { useSelector } from "react-redux";
+
 
 const calculateDueDateClass = (dueDate: string | null) => {
   if (!dueDate) return ""; // No due date, no background color
@@ -49,19 +52,20 @@ const calculateDueDateClass = (dueDate: string | null) => {
 };
 
 
-export const TasksTable = ({ data }: { data: Todo[] }) => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+export const TasksTable = ({ data, totalPages, page, totalTodos }:
+  { data: Todo[], totalPages: number, page: number, totalTodos: number }) => {
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     done: false,
     id: false,
     doneDate: false,
     creationDate: false,
   })
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [page, setPage] = React.useState({ pageIndex: 0, pageSize: 10 })
+  const [rowSelection, setRowSelection] = useState({})
+
+  // const [page, setPage] = useState({ pageIndex: 0, pageSize: 10 })
   const columns = TableColumns()
-  console.log(data)
 
   const table = useReactTable({
     data,
@@ -74,43 +78,13 @@ export const TasksTable = ({ data }: { data: Todo[] }) => {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    onPaginationChange: setPage,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
-      pagination: page,
     },
   })
-
-  // Calculate the total number of pages
-  const totalPages = Math.ceil(table.getFilteredRowModel().rows.length / page.pageSize)
-
-  // Handle the page jump event
-  const handlePageJump = (pageIndex: number) => {
-    setPage({ ...page, pageIndex })
-    table.setPageIndex(pageIndex) // Update the table pagination
-  }
-
-  // Generate a range of page numbers to display
-  const generatePageRange = () => {
-    const range = [];
-    let start = Math.max(0, page.pageIndex - 4); // Start 4 pages back
-    let end = Math.min(totalPages - 1, page.pageIndex + 5); // End 5 pages ahead
-    
-    // Adjust range if close to start or end of pagination
-    if (page.pageIndex <= 4) {
-      end = Math.min(9, totalPages - 1);
-    } else if (page.pageIndex >= totalPages - 5) {
-      start = Math.max(totalPages - 10, 0);
-    }
-
-    for (let i = start; i <= end; i++) {
-      range.push(i);
-    }
-    return range;
-  };
 
   return (
     <div className="grid w-full gap-8">
@@ -174,37 +148,15 @@ export const TasksTable = ({ data }: { data: Todo[] }) => {
       {/* Pagination Controls */}
       <div className="flex items-center justify-between space-x-2 py-4">
         {/* Page Range Display */}
-        <div className="flex-1 text-sm text-muted-foreground">
+        <div className="flex-1 text-sm text-muted-foreground w-auto">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} to-do(s) done.
+          {totalTodos} to-do(s) done.
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handlePageJump(0)}
-            disabled={page.pageIndex === 0}
-          >
-            {"<<"}
-          </Button>
-          {generatePageRange().map((pageNumber) => (
-            <Button
-              key={pageNumber}
-              variant={page.pageIndex === pageNumber ? "secondary" : "outline"}
-              size="sm"
-              onClick={() => handlePageJump(pageNumber)}
-            >
-              {pageNumber + 1}
-            </Button>
-          ))}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handlePageJump(totalPages - 1)}
-            disabled={page.pageIndex === totalPages - 1}
-          >
-            {">>"}
-          </Button>
+        <div className="w-fit">
+          <PaginationControlsDataTable 
+            totalPages={totalPages}
+            page={page}
+          /> 
         </div>
       </div>
 
