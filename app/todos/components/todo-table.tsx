@@ -25,7 +25,6 @@ import { AlertDelete } from "./dialog/confirm-delete"
 import { Todo } from "@/redux/store"
 import   PaginationControlsDataTable from "./pagination/pagination"
 import { useState } from "react"
-import { useSelector } from "react-redux";
 
 
 const calculateDueDateClass = (dueDate: string | null) => {

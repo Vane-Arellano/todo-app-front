@@ -51,7 +51,7 @@ const TableColumns = () => {
       dispatch(changeStatus({ id }));
   
     } catch (error) {
-      toast.error("Failed to update status, try again.");
+      toast.error("Failed to update status, try again." + error);
     }
   };
 

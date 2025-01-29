@@ -9,12 +9,6 @@ import { setPagination } from "@/redux/store";
 import { Fragment } from "react";
 import { useDispatch } from "react-redux";
 
-
-interface PaginationState {
-  pageIndex: number;
-  pageSize: number;
-}
-
 interface PaginationControlsDataTableProps {
   totalPages: number;
   page: number
