@@ -44,18 +44,22 @@ export function DialogDemo() {
 
   const handleSaveTodo = async () => {
     if (newTodo.name != '' && newTodo.priority != ''){
-      const todo = await createNewTodo(newTodo)
-      dispatch(addTodo(todo))
-      dispatch(triggerTodoAdded())
-      setOpen(false)
+      try {
+        const todo = await createNewTodo(newTodo)
+        dispatch(addTodo(todo))
+        dispatch(triggerTodoAdded())
+        setOpen(false)
+        dispatch(restartTodoValues());
 
-
+      }
+      catch (error) {
+        toast("Something went wrong, please try again" + error)
+      }
+      
     }
     else {
       toast("Please fill all fields marked with *")
     }
-
-    dispatch(restartTodoValues());
   }
 
   return (

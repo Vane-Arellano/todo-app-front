@@ -47,26 +47,30 @@ export function EditTaskDemo() {
 
   const handleEditTodo = async () => {
     if(todoToEdit && name != '' && editTodoSelector.priority != ''){
-      dispatch(placeName(name))
-      await updateTodo(edit.id!, { 
-        name: name, 
-        priority: editTodoSelector.priority, 
-        dueDate: editTodoSelector.dueDate});
-      dispatch(closeEdit());
+      try {
+        dispatch(placeName(name))
+        await updateTodo(edit.id!, { 
+          name: name, 
+          priority: editTodoSelector.priority, 
+          dueDate: editTodoSelector.dueDate});
+        dispatch(closeEdit());
 
-      dispatch(editTodo({
-        id: edit.id, 
-        name: name, 
-        priority: editTodoSelector.priority, 
-        dueDate: editTodoSelector.dueDate
-      }));
+        dispatch(editTodo({
+          id: edit.id, 
+          name: name, 
+          priority: editTodoSelector.priority, 
+          dueDate: editTodoSelector.dueDate
+        }));
+        dispatch(restartTodoValues());
+
+
+      } catch(error){
+        toast("Something went wrong, please try again" + error)
+      }
     }
     else {
       toast('Something went wrong, please fill all fields marked with *')
-    }
-
-    dispatch(restartTodoValues());
-    
+    }    
   }
 
   const handleCloseEdit = () => {
