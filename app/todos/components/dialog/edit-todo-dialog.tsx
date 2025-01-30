@@ -13,11 +13,12 @@ import { SelectDemo } from "./priority-picker"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useSelector, useDispatch } from "react-redux"
-import { editTodo, placeName, restartTodoValues, RootState, Todo } from "@/redux/store"
+import { editTodo, placeName, restartTodoValues, RootState } from "@/redux/store"
 import { closeEdit } from "@/redux/store" 
 import { useEffect, useState } from "react"
 import { updateTodo } from "../../service/todos"
 import { toast } from "sonner"
+import { Todo } from "../../interfaces/todos"
 
 export function EditTaskDemo() {
   const edit = useSelector((state: RootState) => state.edit);
