@@ -1,7 +1,7 @@
 "use client"
 import localFont from "next/font/local";
 import { Provider } from 'react-redux';
-import store from '../redux/store'; // Adjust the import path as needed
+import store from '../redux/store'; 
 import "./globals.css";
 
 const geistSans = localFont({

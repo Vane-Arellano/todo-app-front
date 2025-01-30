@@ -12,9 +12,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { placeDueDate } from "@/redux/store"
 
-export function DatePickerDemo() {
-  const [date, setDate] = React.useState<Date>()
+export function DatePickerDemo({prevDate} : {prevDate: Date | undefined}) {
+  const [date, setDate] = useState<Date | undefined>(prevDate)
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (date){
+      dispatch(placeDueDate(date.toISOString()))
+    }
+  }, [date, dispatch])
 
   return (
     <Popover>
