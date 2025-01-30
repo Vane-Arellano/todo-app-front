@@ -1,4 +1,4 @@
-import { TodoBodyState } from "@/redux/store";
+import { TodoBodyState } from "../interfaces/todos";
 
 export const getTodos = async (page: number) => {
     const api_url = process.env.NEXT_PUBLIC_API_URL

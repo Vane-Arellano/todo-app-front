@@ -1,10 +1,8 @@
+import { CreateState, DeleteState, EditState } from '@/app/todos/interfaces/dialogs';
+import { MetricsState } from '@/app/todos/interfaces/metrics';
+import { Pagination, Todo, TodoBodyState, TodosState } from '@/app/todos/interfaces/todos';
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface Pagination {
-  pageIndex: number, 
-  totalPages: number, 
-  totalTodos: number
-}
 
 const initialPaginationState: Pagination = {
   pageIndex: 0,
@@ -30,20 +28,6 @@ const paginationSlice = createSlice({
 
 export const { setPagination, setTotalPages, setTotalTodos } = paginationSlice.actions
 
-export interface Todo {
-  id: string;
-  name: string;
-  priority: string;
-  dueDate: string | null;
-  done: string; 
-  doneDate: string | null; 
-  creationDate: string;
-}
-
-interface TodosState {
-  todos: Todo[];
-  isTodoAdded: boolean
-}
 const initialTodosState: TodosState = {
   todos: [],
   isTodoAdded: false
@@ -99,11 +83,6 @@ const todosSlice = createSlice({
 
 export const { setTodos, addTodo, changeStatus, editTodo, deleteTodoReducer, triggerTodoAdded } = todosSlice.actions;
 
-export interface TodoBodyState { 
-  name: string, 
-  priority: string, 
-  dueDate: string | null,
-}
 
 const initialTodoState: TodoBodyState = { 
   name: '', 
@@ -135,9 +114,6 @@ const todoBodySlice = createSlice({
 
 export const {placeName, placePriority, placeDueDate, restartTodoValues} = todoBodySlice.actions
 
-interface CreateState {
-  create: boolean 
-}
 
 const initialCreateState: CreateState = {
   create: false
@@ -157,12 +133,6 @@ const createTSlice = createSlice({
 })
 
 export const {openCreate, closeCreate} = createTSlice.actions
-
-
-interface EditState {
-  edit: boolean 
-  id?: string 
-}
 
 const initialEditState: EditState = {
   edit: false,
@@ -186,10 +156,6 @@ const editSlice = createSlice({
 
 export const {openEdit, closeEdit} = editSlice.actions
 
-interface DeleteState {
-  delete: boolean 
-  id: string
-}
 
 const initialDeleteState: DeleteState = {
   delete: false,
@@ -213,16 +179,7 @@ const deleteSlice = createSlice({
 
 export const {openDelete, closeDelete} = deleteSlice.actions
 
-interface Metrics {
-  generalAverage: string, 
-  lowAverage: string, 
-  mediumAverage: string, 
-  highAverage: string
-}
 
-interface MetricsState {
-  metrics: Metrics;
-}
 
 
 const metricsInitialState : MetricsState = { 

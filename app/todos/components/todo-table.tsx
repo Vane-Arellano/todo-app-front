@@ -22,9 +22,9 @@ import {
 import { DataTableToolbar } from "./toolbar/data-table-toolbar"
 import TableColumns from "../data/columns"
 import { AlertDelete } from "./dialog/confirm-delete"
-import { Todo } from "@/redux/store"
 import   PaginationControlsDataTable from "./pagination/pagination"
 import { useState } from "react"
+import { Todo } from "../interfaces/todos"
 
 
 const calculateDueDateClass = (dueDate: string | null) => {
