@@ -1,6 +1,6 @@
 import TaskPage from "./todos/page";
 import { MetricsSection } from "./todos/components/metrics/metrics";
-import { EditTaskDemo } from "./todos/components/dialog/edit-todo-dialog";
+import { EditTaskDialog } from "./todos/components/dialog/edit-todo-dialog";
 import { Toaster } from "sonner";
 export default function Home() {
   return (
@@ -10,7 +10,7 @@ export default function Home() {
         <p className="text-2xl font-normal text-slate-400">Let&apos;s plan your tasks</p>
         <TaskPage/>
         <MetricsSection/>
-        <EditTaskDemo/> 
+        <EditTaskDialog/> 
         <Toaster/>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">

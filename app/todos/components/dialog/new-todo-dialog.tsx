@@ -20,7 +20,7 @@ import { placeName } from "@/redux/store"
 import { createNewTodo } from "../../service/todos"
 import { toast } from "sonner"
 
-export function DialogDemo() {
+export function NewTodoDialog() {
   const [name, setName] = useState(''); 
   const [debouncedName, setDebouncedName] = useState(name);
   const [open, setOpen] = useState(false)

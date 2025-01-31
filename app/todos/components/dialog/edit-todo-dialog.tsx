@@ -20,7 +20,7 @@ import { updateTodo } from "../../service/todos"
 import { toast } from "sonner"
 import { Todo } from "../../interfaces/todos"
 
-export function EditTaskDemo() {
+export function EditTaskDialog() {
   const edit = useSelector((state: RootState) => state.edit);
   const todos = useSelector((state: RootState) => state.todos.todos);
   const editTodoSelector = useSelector((state: RootState) => state.todoBody)

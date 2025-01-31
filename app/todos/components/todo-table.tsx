@@ -63,7 +63,6 @@ export const TasksTable = ({ data, totalPages, page, totalTodos }:
   })
   const [rowSelection, setRowSelection] = useState({})
 
-  // const [page, setPage] = useState({ pageIndex: 0, pageSize: 10 })
   const columns = TableColumns()
 
   const table = useReactTable({

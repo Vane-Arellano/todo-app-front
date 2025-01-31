@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openEdit, openDelete, changeStatus, RootState } from "@/redux/store";
 import { changeTodoStatus } from "../service/todos";
 import { toast } from "sonner";
+import { priorities } from "./data";
 
 export type Task = {
   id: string;
@@ -44,7 +45,6 @@ const TableColumns = () => {
   };
 
   const handleStatusChange = async (id: string) => {
-    console.log('gets here')
     try {
       await changeTodoStatus(id);
   
@@ -58,6 +58,7 @@ const TableColumns = () => {
   const handleMultipleStatusChange = (value: string | boolean, table : Table<Task>) => {
     if(!!value === true){
       table.toggleAllPageRowsSelected(!!value)
+      // Set timeout to execute this code just after toggle rows selection values
       setTimeout(() => {
         const selectedRows = table.getFilteredSelectedRowModel().rows
         const selectedIds: string[] = selectedRows.map((row) => row.getValue("id")); 
@@ -67,6 +68,7 @@ const TableColumns = () => {
       const selectedRows = table.getFilteredSelectedRowModel().rows
       const selectedIds: string[] = selectedRows.map((row) => row.getValue("id")); 
       selectedIds.forEach((id) => handleStatusChange(id))
+      // Set timeout toggle rows selection values after sending the ids to change it 
       setTimeout(() => {
         table.toggleAllPageRowsSelected(!!value)
       }, 0)
@@ -138,9 +140,9 @@ const TableColumns = () => {
       },
       cell: ({ row }) => (
         <div className="lowercase">
-          {row.getValue("priority") === '0'
+          {row.getValue("priority") === priorities[0].value
             ? "low"
-            : row.getValue("priority") === '1'
+            : row.getValue("priority") === priorities[1].value
             ? "medium"
             : "high"}
         </div>
