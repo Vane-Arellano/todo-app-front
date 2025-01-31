@@ -35,7 +35,7 @@ export const updateTodo = async (id : string, todoBody: TodoBodyState) => {
 export const changeTodoStatus = async (id: string) => {
     const api_url = process.env.NEXT_PUBLIC_API_URL
     const response = await fetch (`${api_url}/${id}/changeStatus`, {
-        method: 'PUT', 
+        method: 'PATCH', 
     }); 
     const itChanged = response.ok
     return itChanged
