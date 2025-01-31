@@ -6,7 +6,7 @@ import { priorities } from "../../data/data"
 import { DataTableFacetedFilter } from "./data-table-filters"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { DialogDemo } from "../dialog/new-todo-dialog"
+import { NewTodoDialog } from "../dialog/new-todo-dialog"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -41,7 +41,7 @@ export function DataTableToolbar<TData>({
             <DataTableFacetedFilter
               column={table.getColumn("done")}
               title="Status"
-              options={checkboxOptions} // Use the checkbox options (Checked, Unchecked)
+              options={checkboxOptions}
             />
           )}
 
@@ -50,7 +50,7 @@ export function DataTableToolbar<TData>({
             <DataTableFacetedFilter
               column={table.getColumn("priority")}
               title="Priority"
-              options={priorities} // Priorities should be predefined options
+              options={priorities} 
             />
           )}
 
@@ -67,7 +67,7 @@ export function DataTableToolbar<TData>({
         </div>
 
         <div className="flex space-x-2">
-          <DialogDemo />
+          <NewTodoDialog />
         </div>
       </div>
     </div>
