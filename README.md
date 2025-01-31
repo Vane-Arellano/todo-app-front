@@ -6,7 +6,7 @@ This is the frontend application for the Todo App, built with Next.js and TypeSc
 
 - *Task Management*: Create, edit, and delete tasks.
 - *Task Categorization*: Organize tasks into categories for better management.
-- *Responsive Design*: Optimized for various devices and screen sizes.
+- *Metrics:* Know the average between the creation date of a task and the date you finish it, also know the average by category
 
 ## Prerequisites
 
@@ -38,7 +38,6 @@ Necessary environment variables can be already found on the project.
 ```
 Using npm:
 npm run build
-and then
 npm run start
 
 Or using yarn:
