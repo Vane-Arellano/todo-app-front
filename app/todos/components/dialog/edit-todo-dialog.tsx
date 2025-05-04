@@ -50,6 +50,7 @@ export function EditTaskDialog() {
     if(todoToEdit && name != '' && editTodoSelector.priority != ''){
       try {
         dispatch(placeName(name))
+
         await updateTodo(edit.id!, { 
           name: name, 
           priority: editTodoSelector.priority, 
@@ -62,10 +63,12 @@ export function EditTaskDialog() {
           priority: editTodoSelector.priority, 
           dueDate: editTodoSelector.dueDate
         }));
+        
         dispatch(restartTodoValues());
 
 
       } catch(error){
+        console.log(error)
         toast("Something went wrong, please try again" + error)
       }
     }
@@ -96,12 +99,13 @@ export function EditTaskDialog() {
                 </Label>
                 <Input 
                   id="name" 
+                  data-testid="name"
                   value={name} 
                   onChange={(e) => setName(e.target.value)} 
                   className="col-span-3"/>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
+                <Label className="text-right">
                   Priority
                 </Label>
                 <SelectDemo prevPriority={priority!}/>
@@ -114,7 +118,7 @@ export function EditTaskDialog() {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" onClick={handleEditTodo}>Edit To-Do</Button>
+              <Button type="submit" name="edit-to-do" onClick={handleEditTodo}>Edit To-Do</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

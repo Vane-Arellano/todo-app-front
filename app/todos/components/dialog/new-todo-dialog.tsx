@@ -43,7 +43,9 @@ export function NewTodoDialog() {
   }, [debouncedName, dispatch]);
 
   const handleSaveTodo = async () => {
+    console.log('=========== ENters to handle ============== ', newTodo)
     if (newTodo.name != '' && newTodo.priority != ''){
+      
       try {
         const todo = await createNewTodo(newTodo)
         dispatch(addTodo(todo))
@@ -81,12 +83,13 @@ export function NewTodoDialog() {
             </Label>
             <Input 
               id="name" 
+              data-testid="name"
               value={name} 
               onChange={(e) => setName(e.target.value)} 
               placeholder="Task 1" className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
+            <Label className="text-right">
               Priority *
             </Label>
             <SelectDemo prevPriority=''/>

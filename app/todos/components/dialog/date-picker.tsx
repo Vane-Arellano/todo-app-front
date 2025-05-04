@@ -31,6 +31,7 @@ export function DatePickerDemo({prevDate} : {prevDate: Date | undefined}) {
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          data-testid="due-date-button"
           variant={"outline"}
           className={cn(
             "col-span-3 justify-start text-left font-normal",

@@ -88,7 +88,7 @@ export const TasksTable = ({ data, totalPages, page, totalTodos }:
     <div className="grid w-full gap-8">
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
-        <Table>
+        <Table data-testid="todo-table">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

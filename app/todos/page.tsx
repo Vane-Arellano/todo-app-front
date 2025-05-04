@@ -36,7 +36,7 @@ export default function TaskPage() {
 
   if (loading) {
     return (
-      <div className="flex h-screen w-full justify-center items-center">
+      <div className="flex h-screen w-full justify-center items-center" data-testid="task-page">
         <div
           className="text-primary inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
           role="status">
@@ -51,7 +51,7 @@ export default function TaskPage() {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10" data-testid="task-page">
       <TasksTable 
         data={todos} 
         totalPages={pagination.totalPages} 

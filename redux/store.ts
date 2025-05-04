@@ -10,7 +10,7 @@ const initialPaginationState: Pagination = {
   totalTodos: 0
 }
 
-const paginationSlice = createSlice({
+export const paginationSlice = createSlice({
   name: 'pagination', 
   initialState: initialPaginationState, 
   reducers: {
@@ -33,7 +33,7 @@ const initialTodosState: TodosState = {
   isTodoAdded: false
 };
 
-const todosSlice = createSlice({
+export const todosSlice = createSlice({
   name: 'todos',
   initialState: initialTodosState,
   reducers: {
@@ -90,7 +90,7 @@ const initialTodoState: TodoBodyState = {
   dueDate: null
 }
 
-const todoBodySlice = createSlice({
+export const todoBodySlice = createSlice({
   name: 'newTodo', 
   initialState: initialTodoState, 
   reducers: {
@@ -115,11 +115,11 @@ const todoBodySlice = createSlice({
 export const {placeName, placePriority, placeDueDate, restartTodoValues} = todoBodySlice.actions
 
 
-const initialCreateState: CreateState = {
+const initialCreateState: CreateState | undefined = {
   create: false
 }
 
-const createTSlice = createSlice({
+export const createTSlice = createSlice({
   name: 'create', 
   initialState: initialCreateState, 
   reducers: {
@@ -134,12 +134,12 @@ const createTSlice = createSlice({
 
 export const {openCreate, closeCreate} = createTSlice.actions
 
-const initialEditState: EditState = {
+const initialEditState: EditState | undefined = {
   edit: false,
   id: ''
 }
 
-const editSlice = createSlice({
+export const editSlice = createSlice({
   name: 'edit', 
   initialState: initialEditState, 
   reducers: {
@@ -157,12 +157,12 @@ const editSlice = createSlice({
 export const {openEdit, closeEdit} = editSlice.actions
 
 
-const initialDeleteState: DeleteState = {
+const initialDeleteState: DeleteState | undefined = {
   delete: false,
   id: ''
 }
 
-const deleteSlice = createSlice({
+export const deleteSlice = createSlice({
   name: 'delete', 
   initialState: initialDeleteState, 
   reducers: {
@@ -182,7 +182,7 @@ export const {openDelete, closeDelete} = deleteSlice.actions
 
 
 
-const metricsInitialState : MetricsState = { 
+const metricsInitialState : MetricsState | undefined = { 
   metrics: {
     generalAverage: '00:00 minutes',
     lowAverage: '00:00 minutes',
@@ -191,7 +191,7 @@ const metricsInitialState : MetricsState = {
   }
 }
 
-const metricsSlice = createSlice({
+export const metricsSlice = createSlice({
   name: 'metrics', 
   initialState: metricsInitialState, 
   reducers: {
@@ -204,7 +204,7 @@ const metricsSlice = createSlice({
 export const { setMetrics } = metricsSlice.actions
 
 
-const store = configureStore({
+const Store = configureStore({
   reducer: {
     create: createTSlice.reducer,
     edit: editSlice.reducer, 
@@ -216,8 +216,8 @@ const store = configureStore({
   },
 });
 
-export default store;
+export default Store;
 
-// Define types for the Redux store
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+// Define types for the Redux Store
+export type RootState = ReturnType<typeof Store.getState>;
+export type AppDispatch = typeof Store.dispatch;

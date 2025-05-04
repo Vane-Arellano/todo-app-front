@@ -18,7 +18,10 @@ export const MetricsSection = () => {
       }, [todos, dispatch]);
 
     return (
-        <div className="w-full h-full flex items-center justify-between border-2 border-dashed border-primary p-8 px-16">
+        <div 
+        data-testid="metrics-section"
+        className="w-full h-full flex items-center justify-between border-2 border-dashed border-primary p-8 px-16"
+        >
             <div className="flex flex-col">
                 <p className="font-bold">Average time to finish tasks</p>
                 <p>{metrics.generalAverage}</p>
