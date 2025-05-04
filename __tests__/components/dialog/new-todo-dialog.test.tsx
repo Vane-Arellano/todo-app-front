@@ -1,5 +1,5 @@
 // __tests__/components/dialog/new-todo-dialog.test.tsx
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import {
     createTSlice,
@@ -9,10 +9,7 @@ import {
     paginationSlice,
     todoBodySlice,
     todosSlice,
-    triggerTodoAdded,
     restartTodoValues,
-    setTodos,
-    addTodo,
     placePriority,
     placeName
 } from '@/redux/store';

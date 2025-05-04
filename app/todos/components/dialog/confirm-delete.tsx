@@ -28,7 +28,7 @@ import { deleteTodo } from "../../service/todos";
         <AlertDialog open={deleteS.delete} onOpenChange={handleCloseDelete}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle data-testid="confirm-delete">Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
                 You wont be able to undo this action and recover the task you&apos;re deleting.
               </AlertDialogDescription>

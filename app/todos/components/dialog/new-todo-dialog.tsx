@@ -43,7 +43,6 @@ export function NewTodoDialog() {
   }, [debouncedName, dispatch]);
 
   const handleSaveTodo = async () => {
-    console.log('=========== ENters to handle ============== ', newTodo)
     if (newTodo.name != '' && newTodo.priority != ''){
       
       try {
