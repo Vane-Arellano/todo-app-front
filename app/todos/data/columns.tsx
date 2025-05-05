@@ -16,6 +16,7 @@ import { changeTodoStatus } from "../service/todos";
 import { toast } from "sonner";
 import { priorities } from "./data";
 import { deleteText, dueDateText, editText, nameText, priorityText } from "@/const/todo-constants";
+import { handleMultipleStatusChange, handleOpenDelete, handleOpenEdit, handleStatusChange } from "../handlers/columnsHandlers";
 
 export type Task = {
   id: string;
@@ -30,52 +31,6 @@ export type Task = {
 const TableColumns = () => {
   const dispatch = useDispatch();
   const todos = useSelector((state: RootState) => state.todos.todos);
-
-  const handleOpenEdit = (id: string) => {
-    const todoToEdit = todos.find((todo) => todo.id === id);
-
-    if (todoToEdit) {
-      dispatch(openEdit(id));
-    } else {
-      toast('Something went wrong, try again');
-    }
-  };
-
-  const handleOpenDelete = (id: string) => {
-    dispatch(openDelete(id));
-  };
-
-  const handleStatusChange = async (id: string) => {
-    try {
-      await changeTodoStatus(id);
-  
-      dispatch(changeStatus({ id }));
-  
-    } catch (error) {
-      toast.error("Failed to update status, try again." + error);
-    }
-  };
-
-  const handleMultipleStatusChange = (value: string | boolean, table : Table<Task>) => {
-    if(!!value === true){
-      table.toggleAllPageRowsSelected(!!value)
-      // Set timeout to execute this code just after toggle rows selection values
-      setTimeout(() => {
-        const selectedRows = table.getFilteredSelectedRowModel().rows
-        const selectedIds: string[] = selectedRows.map((row) => row.getValue("id")); 
-        selectedIds.forEach((id) => handleStatusChange(id))
-      }, 0)
-    } else {
-      const selectedRows = table.getFilteredSelectedRowModel().rows
-      const selectedIds: string[] = selectedRows.map((row) => row.getValue("id")); 
-      selectedIds.forEach((id) => handleStatusChange(id))
-      // Set timeout toggle rows selection values after sending the ids to change it 
-      setTimeout(() => {
-        table.toggleAllPageRowsSelected(!!value)
-      }, 0)
-    }
-    
-  }
 
   const columns: ColumnDef<Task>[] = [
     {
@@ -105,7 +60,7 @@ const TableColumns = () => {
               (table.getIsSomePageRowsSelected() && "indeterminate")
             }
             onCheckedChange={(value) => {
-              handleMultipleStatusChange(value, table)
+              handleMultipleStatusChange(value, table, dispatch);
             }}
             aria-label="Select all"
           />
@@ -116,7 +71,7 @@ const TableColumns = () => {
           checked={row.getIsSelected() || row.getValue("done") === 'true'}
           onCheckedChange={(value) => {
             row.toggleSelected(!!value);
-            handleStatusChange(row.getValue("id"));
+            handleStatusChange(row.getValue("id"), dispatch);
           }}
           aria-label="Select row"
         />
@@ -184,14 +139,14 @@ const TableColumns = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-primary"
-                  onClick={() => handleOpenEdit(row.getValue("id"))}
+                  onClick={() => handleOpenEdit(row.getValue("id"), todos, dispatch)}
                 >
                   <Edit />
                   {editText}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="text-red-600"
-                  onClick={() => handleOpenDelete(row.getValue("id"))}
+                  onClick={() => handleOpenDelete(row.getValue("id"), dispatch)}
                 >
                   <Trash />
                   {deleteText}
