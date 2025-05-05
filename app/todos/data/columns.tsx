@@ -1,4 +1,4 @@
-import { ColumnDef, Table } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, Edit, MoreHorizontal, Trash } from "lucide-react";
@@ -11,9 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDispatch, useSelector } from "react-redux";
-import { openEdit, openDelete, changeStatus, RootState } from "@/redux/store";
-import { changeTodoStatus } from "../service/todos";
-import { toast } from "sonner";
+import { RootState } from "@/redux/store";
 import { priorities } from "./data";
 import { deleteText, dueDateText, editText, nameText, priorityText } from "@/const/todo-constants";
 import { handleMultipleStatusChange, handleOpenDelete, handleOpenEdit, handleStatusChange } from "../handlers/columnsHandlers";
