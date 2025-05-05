@@ -84,7 +84,7 @@ export function EditTaskDialog() {
   return (
     <>{
       edit && (
-        <Dialog open={edit.edit} onOpenChange={handleCloseEdit}>
+        <Dialog open={edit.edit} onOpenChange={handleCloseEdit} data-testid="edit-dialog">
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Edit To-Do</DialogTitle>

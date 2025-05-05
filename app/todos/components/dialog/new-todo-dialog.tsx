@@ -64,7 +64,7 @@ export function NewTodoDialog() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={() => {setOpen(!open)}} >
+    <Dialog open={open} onOpenChange={() => {setOpen(!open)}}>
       <DialogTrigger asChild>
         <Button onClick={() => {setOpen(true)}}><Plus/> New To-Do</Button>
       </DialogTrigger>

@@ -66,7 +66,7 @@ export function DataTableToolbar<TData>({
           )}
         </div>
 
-        <div className="flex space-x-2">
+        <div className="flex space-x-2" data-testid="new-todo-dialog">
           <NewTodoDialog />
         </div>
       </div>

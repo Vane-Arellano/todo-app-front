@@ -1,7 +1,7 @@
 // __tests__/components/dialog/edit-task-dialog.test.tsx
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import Store, { createTSlice, deleteSlice, editSlice, editTodo, metricsSlice, openEdit, paginationSlice, todoBodySlice, todosSlice } from '@/redux/store'; // your store without redux-thunk
+import Store, { closeEdit, createTSlice, deleteSlice, editSlice, editTodo, metricsSlice, openEdit, paginationSlice, todoBodySlice, todosSlice } from '@/redux/store'; // your store without redux-thunk
 import { setTodos } from '@/redux/store';
 import userEvent from '@testing-library/user-event';
 import { Todo } from '@/app/todos/interfaces/todos';
@@ -14,6 +14,8 @@ vitest.mock('@/service/todos', () => ({
 }));
 
 describe('EditTaskDialog', () => {
+    const mockDispatch = vi.fn();
+
     const mockTodo: Todo = {
         id: '1',
         name: 'Test Todo',
@@ -67,7 +69,6 @@ describe('EditTaskDialog', () => {
 
         // Check that the initial todo data is displayed
         expect(screen.getByDisplayValue(mockTodo.name)).toBeInTheDocument();
-        // expect(screen.getByText(/low/i)).toBeInTheDocument(); TODO: try solve this with low 
     });
 
     it('allows the user to edit the task and save changes', async () => {
