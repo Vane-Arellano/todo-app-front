@@ -1,11 +1,9 @@
 'use client'
 import { useDispatch, useSelector } from "react-redux";
 import  { TasksTable } from "./components/todo-table"
-import { RootState, setTodos, setTotalPages, setTotalTodos } from "@/redux/store";
+import { RootState } from "@/redux/store";
 import { useEffect, useState } from "react";
-import { getTodos } from "./service/todos";
-import { toast } from "sonner";
-import { TodosResponse } from "./interfaces/todos";
+import { fetchTodos } from "./handlers/taskPageHandlers";
 
 export default function TaskPage() {
   const dispatch = useDispatch();
@@ -15,23 +13,7 @@ export default function TaskPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        setLoading(true);
-        const data : TodosResponse = await getTodos(pagination.pageIndex);
-        
-        dispatch(setTodos(data.todos));
-        dispatch(setTotalPages(data.totalPages));
-        dispatch(setTotalTodos(data.totalTodos))
-        setLoading(false); 
-
-      } catch (e) {
-        toast('Somewthing went wrong ' + e);
-      }
-      
-    };
-
-    fetchTodos();
+    fetchTodos({setLoading, pagination, dispatch});
   }, [dispatch, isTodoAdded, pagination]);
 
   if (loading) {

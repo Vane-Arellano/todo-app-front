@@ -8,24 +8,16 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
   } from "@/components/ui/alert-dialog"
-import { closeDelete, deleteTodoReducer, RootState } from "@/redux/store";
+import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTodo } from "../../service/todos";
+import { handleCloseDelete, handleDeleteTodo } from "../../handlers/confirmDeleteHandlers";
   
   export function AlertDelete() {
     const deleteS = useSelector((state: RootState) => state.delete);
     const dispatch = useDispatch();
 
-    const handleDeleteTodo = async () => {
-      dispatch(deleteTodoReducer(deleteS.id))
-      await deleteTodo(deleteS.id)
-    }
-    const handleCloseDelete = () => {
-        dispatch(closeDelete());
-    }
     return (
-      
-        <AlertDialog open={deleteS.delete} onOpenChange={handleCloseDelete}>
+        <AlertDialog open={deleteS.delete}>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle data-testid="confirm-delete">Are you absolutely sure?</AlertDialogTitle>
@@ -34,8 +26,11 @@ import { deleteTodo } from "../../service/todos";
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteTodo}>Continue</AlertDialogAction>
+              <AlertDialogCancel onClick={() => handleCloseDelete({dispatch})}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() =>{
+                 handleDeleteTodo({dispatch, deleteS})
+                 handleCloseDelete({dispatch})
+                }}>Continue</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog> 

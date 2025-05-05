@@ -13,12 +13,11 @@ import { SelectDemo } from "./priority-picker"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useSelector, useDispatch } from "react-redux"
-import { editTodo, placeName, restartTodoValues, RootState } from "@/redux/store"
+import {  RootState } from "@/redux/store"
 import { closeEdit } from "@/redux/store" 
 import { useEffect, useState } from "react"
-import { updateTodo } from "../../service/todos"
-import { toast } from "sonner"
 import { Todo } from "../../interfaces/todos"
+import { handleCloseEdit, handleEditTodo, handlePlaceTodoToEdit } from "../../handlers/editTodoDialogHandlers"
 
 export function EditTaskDialog() {
   const edit = useSelector((state: RootState) => state.edit);
@@ -33,58 +32,18 @@ export function EditTaskDialog() {
   const todoToEdit: Todo | undefined  = todos.find(todo => todo.id === edit.id);
 
   useEffect(() => {
-    if (todoToEdit) {
-      setName(todoToEdit.name)
-      setPriority(
-        todoToEdit.priority == '0' 
-        ? "low" : todoToEdit.priority == '1' 
-        ? "medium" : "high")
-      if (todoToEdit.dueDate !== null) {
-        setDueDate(new Date(todoToEdit.dueDate))
-      }
-    }
+    handlePlaceTodoToEdit(
+      todoToEdit,
+      setName,
+      setPriority,
+      setDueDate
+    )
   }, [todoToEdit])
-
-
-  const handleEditTodo = async () => {
-    if(todoToEdit && name != '' && editTodoSelector.priority != ''){
-      try {
-        dispatch(placeName(name))
-
-        await updateTodo(edit.id!, { 
-          name: name, 
-          priority: editTodoSelector.priority, 
-          dueDate: editTodoSelector.dueDate});
-        dispatch(closeEdit());
-
-        dispatch(editTodo({
-          id: edit.id, 
-          name: name, 
-          priority: editTodoSelector.priority, 
-          dueDate: editTodoSelector.dueDate
-        }));
-        
-        dispatch(restartTodoValues());
-
-
-      } catch(error){
-        console.log(error)
-        toast("Something went wrong, please try again" + error)
-      }
-    }
-    else {
-      toast('Something went wrong, please fill all fields marked with *')
-    }    
-  }
-
-  const handleCloseEdit = () => {
-    dispatch(closeEdit());
-  }
 
   return (
     <>{
       edit && (
-        <Dialog open={edit.edit} onOpenChange={handleCloseEdit} data-testid="edit-dialog">
+        <Dialog open={edit.edit} onOpenChange={() => handleCloseEdit(dispatch, closeEdit)} data-testid="edit-dialog">
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Edit To-Do</DialogTitle>
@@ -118,7 +77,18 @@ export function EditTaskDialog() {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" name="edit-to-do" onClick={handleEditTodo}>Edit To-Do</Button>
+              <Button type="submit" name="edit-to-do" onClick={
+                () => handleEditTodo(
+                  todoToEdit,
+                  name, 
+                  editTodoSelector,
+                  dispatch, 
+                  edit,
+                  closeEdit
+                )
+                }>
+                  Edit To-Do
+                </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
