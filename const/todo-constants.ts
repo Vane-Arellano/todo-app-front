@@ -1,5 +1,5 @@
 export const title = "Welcome!"; 
-export const description = "Let&apos;s plan your tasks";
+export const description = "Let's plan your tasks";
 export const noResults = "No results found.";
 export const clearFilters = "Clear filters";
 export const metricsAverage = "Average time to finish tasks";
@@ -22,3 +22,5 @@ export const saveTodoText = "Save To-Do";
 export const doneText = "Done";
 export const undoneText = "Undone";
 export const statusText = "Status";
+export const deleteText = "Delete";
+export const editText = "Edit";

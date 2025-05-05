@@ -15,6 +15,7 @@ import { openEdit, openDelete, changeStatus, RootState } from "@/redux/store";
 import { changeTodoStatus } from "../service/todos";
 import { toast } from "sonner";
 import { priorities } from "./data";
+import { deleteText, dueDateText, editText, nameText, priorityText } from "@/const/todo-constants";
 
 export type Task = {
   id: string;
@@ -123,7 +124,7 @@ const TableColumns = () => {
     },
     {
       accessorKey: "name",
-      header: "Name",
+      header: nameText,
     },
     {
       accessorKey: "priority",
@@ -133,7 +134,7 @@ const TableColumns = () => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Priority
+            {priorityText}
             <ArrowUpDown />
           </Button>
         );
@@ -156,7 +157,7 @@ const TableColumns = () => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Due Date
+            {dueDateText}
             <ArrowUpDown />
           </Button>
         );
@@ -186,14 +187,14 @@ const TableColumns = () => {
                   onClick={() => handleOpenEdit(row.getValue("id"))}
                 >
                   <Edit />
-                  Edit
+                  {editText}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="text-red-600"
                   onClick={() => handleOpenDelete(row.getValue("id"))}
                 >
                   <Trash />
-                  Delete
+                  {deleteText}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
