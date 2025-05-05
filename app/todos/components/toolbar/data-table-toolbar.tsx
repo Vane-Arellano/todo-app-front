@@ -16,8 +16,6 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
-
-  // Define the checkbox filter options
   const checkboxOptions = [
     { label: "Done", value: true },
     { label: "Undone", value: false },
@@ -35,7 +33,6 @@ export function DataTableToolbar<TData>({
             }
             className="w-[150px] lg:w-1/2"
           />
-          {/* Checkbox Selection Filter */}
           {
           table.getColumn("done") && (
             <DataTableFacetedFilter
@@ -44,8 +41,6 @@ export function DataTableToolbar<TData>({
               options={checkboxOptions}
             />
           )}
-
-          {/* Priority Filter */}
           {table.getColumn("priority") && (
             <DataTableFacetedFilter
               column={table.getColumn("priority")}

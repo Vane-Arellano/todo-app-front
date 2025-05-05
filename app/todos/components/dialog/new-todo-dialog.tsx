@@ -15,10 +15,9 @@ import { Label } from "@/components/ui/label"
 import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux';
-import { addTodo, restartTodoValues, RootState, triggerTodoAdded } from "@/redux/store";
+import { RootState } from "@/redux/store";
 import { placeName } from "@/redux/store"
-import { createNewTodo } from "../../service/todos"
-import { toast } from "sonner"
+import { handleSaveTodo } from "../../handlers/newTodoDialogHandlers"
 
 export function NewTodoDialog() {
   const [name, setName] = useState(''); 
@@ -30,38 +29,17 @@ export function NewTodoDialog() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedName(name);  // Update the debounced name
-    }, 500);  // 500ms debounce
+      setDebouncedName(name);  
+    }, 500);  
 
-    return () => clearTimeout(timer);  // Cleanup the previous timeout
+    return () => clearTimeout(timer);  
   }, [name]);
 
   useEffect(() => {
     if (debouncedName) {
-      dispatch(placeName(debouncedName));  // Dispatch only after debouncing
+      dispatch(placeName(debouncedName));  
     }
   }, [debouncedName, dispatch]);
-
-  const handleSaveTodo = async () => {
-    if (newTodo.name != '' && newTodo.priority != ''){
-      
-      try {
-        const todo = await createNewTodo(newTodo)
-        dispatch(addTodo(todo))
-        dispatch(triggerTodoAdded())
-        setOpen(false)
-        dispatch(restartTodoValues());
-
-      }
-      catch (error) {
-        toast("Something went wrong, please try again" + error)
-      }
-      
-    }
-    else {
-      toast("Please fill all fields marked with *")
-    }
-  }
 
   return (
     <Dialog open={open} onOpenChange={() => {setOpen(!open)}}>
@@ -101,7 +79,9 @@ export function NewTodoDialog() {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleSaveTodo}>Save To-Do</Button>
+          <Button type="submit" onClick={ () => 
+            handleSaveTodo(newTodo, dispatch, setOpen)
+          }>Save To-Do</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

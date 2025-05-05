@@ -5,9 +5,9 @@ import { Pagination,
   PaginationLink, 
   PaginationNext, 
   PaginationEllipsis } from "@/components/ui/pagination";
-import { setPagination } from "@/redux/store";
 import { Fragment } from "react";
 import { useDispatch } from "react-redux";
+import { getPageNumbers, handlePageChange } from "../../handlers/paginationHandlers";
 
 interface PaginationControlsDataTableProps {
   totalPages: number;
@@ -17,32 +17,7 @@ interface PaginationControlsDataTableProps {
 const PaginationControlsDataTable: React.FC<PaginationControlsDataTableProps> = ({ totalPages, page }) => {
   const dispatch = useDispatch();
   
-  const handlePageChange = (currentPage: number) => {
-    if (currentPage !== page && currentPage >= 0 && currentPage <= totalPages -1) {
-      dispatch(setPagination(currentPage))
-    }
-  };
-  
-  const getPageNumbers = () => {
-    const currentPage = page;
-    const pages: number[] = [];
-  
-    // Always show the first page
-    if (currentPage > 0) pages.push(0);
-  
-    for (let i = Math.max(0, currentPage); i <= Math.min(currentPage + 2, totalPages -2); i++) {
-      pages.push(i);
-    }
-  
-    // Always show the last page
-    if (currentPage < totalPages) {
-      pages.push(totalPages - 1);
-    }
-  
-    return pages;
-  };
-  
-  const pageNumbers = getPageNumbers();
+  const pageNumbers = getPageNumbers(page, totalPages);
   
   return (
     <Pagination>
@@ -50,7 +25,7 @@ const PaginationControlsDataTable: React.FC<PaginationControlsDataTableProps> = 
         <PaginationItem>
           <PaginationPrevious
             href="#"
-            onClick={() => handlePageChange(Math.max(0, page - 1))}
+            onClick={() => handlePageChange(Math.max(0, page - 1), page, totalPages, dispatch)}
             className={page === 0 ? "pointer-events-none opacity-50" : ""}
           />
         </PaginationItem>
@@ -68,7 +43,7 @@ const PaginationControlsDataTable: React.FC<PaginationControlsDataTableProps> = 
               <PaginationItem key={pageNumber}>
                 <PaginationLink
                   href="#"
-                  onClick={() => handlePageChange(pageNumber)}
+                  onClick={() => handlePageChange(pageNumber, page, totalPages, dispatch)}
                   isActive={isActive}
                 >
                   {pageNumber + 1}
@@ -81,7 +56,7 @@ const PaginationControlsDataTable: React.FC<PaginationControlsDataTableProps> = 
         <PaginationItem>
           <PaginationNext
             href="#"
-            onClick={() => handlePageChange(Math.min(totalPages - 1, page + 1))}
+            onClick={() => handlePageChange(Math.min(totalPages - 1, page + 1), page, totalPages, dispatch)}
             className={page === totalPages - 1 ? "pointer-events-none opacity-50" : ""}
           />
         </PaginationItem>

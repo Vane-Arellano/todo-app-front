@@ -1,20 +1,15 @@
 'use client'
 import { useEffect } from "react";
-import { getMetrics } from "../../service/metrics"
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, setMetrics } from "@/redux/store";
+import { RootState } from "@/redux/store";
+import { fetchMetrics } from "../../handlers/metricsHandlers";
 
 export const MetricsSection = () => {
     const dispatch = useDispatch();
     const todos = useSelector((state: RootState) => state.todos);
     const metrics = useSelector((state: RootState) => state.metrics.metrics);
     useEffect(() => {
-        const fetchMetrics = async () => {
-            const data = await getMetrics();
-            dispatch(setMetrics(data))
-        };
-    
-        fetchMetrics();
+        fetchMetrics(dispatch);
       }, [todos, dispatch]);
 
     return (
