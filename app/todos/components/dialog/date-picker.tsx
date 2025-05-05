@@ -15,6 +15,7 @@ import {
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { placeDueDate } from "@/redux/store"
+import { dueDateText } from "@/const/todo-constants"
 
 export function DatePickerDemo({prevDate} : {prevDate: Date | undefined}) {
   const [date, setDate] = useState<Date | undefined>(prevDate)
@@ -39,7 +40,7 @@ export function DatePickerDemo({prevDate} : {prevDate: Date | undefined}) {
           )}
         >
           <CalendarIcon />
-          {date ? format(date, "PPP") : <span>Due date</span>}
+          {date ? format(date, "PPP") : <span>{dueDateText}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

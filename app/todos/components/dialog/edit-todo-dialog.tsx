@@ -18,6 +18,7 @@ import { closeEdit } from "@/redux/store"
 import { useEffect, useState } from "react"
 import { Todo } from "../../interfaces/todos"
 import { handleCloseEdit, handleEditTodo, handlePlaceTodoToEdit } from "../../handlers/editTodoDialogHandlers"
+import { dueDateText, editTodoDescription, editTodoText, nameText, priorityText } from "@/const/todo-constants"
 
 export function EditTaskDialog() {
   const edit = useSelector((state: RootState) => state.edit);
@@ -46,15 +47,15 @@ export function EditTaskDialog() {
         <Dialog open={edit.edit} onOpenChange={() => handleCloseEdit(dispatch, closeEdit)} data-testid="edit-dialog">
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Edit To-Do</DialogTitle>
+              <DialogTitle>{editTodoText}</DialogTitle>
               <DialogDescription>
-                Edit To-Do task
+                {editTodoDescription}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
-                  Name
+                  {nameText}
                 </Label>
                 <Input 
                   id="name" 
@@ -65,13 +66,13 @@ export function EditTaskDialog() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">
-                  Priority
+                  {priorityText}
                 </Label>
                 <SelectDemo prevPriority={priority!}/>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="duedate" className="text-right">
-                  Due Date
+                  {dueDateText}
                 </Label>
                 <DatePickerDemo prevDate={dueDate ?? undefined}/>
               </div>
@@ -87,7 +88,7 @@ export function EditTaskDialog() {
                   closeEdit
                 )
                 }>
-                  Edit To-Do
+                  {editTodoText}
                 </Button>
             </DialogFooter>
           </DialogContent>

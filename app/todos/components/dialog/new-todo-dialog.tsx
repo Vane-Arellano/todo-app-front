@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "@/redux/store";
 import { placeName } from "@/redux/store"
 import { handleSaveTodo } from "../../handlers/newTodoDialogHandlers"
+import { dueDateText, nameText, newTodoDescription, newTodoText, priorityText, saveTodoText } from "@/const/todo-constants"
 
 export function NewTodoDialog() {
   const [name, setName] = useState(''); 
@@ -48,15 +49,15 @@ export function NewTodoDialog() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>New To-Do</DialogTitle>
+          <DialogTitle>{newTodoText}</DialogTitle>
           <DialogDescription>
-            Create a new To-Do task
+            {newTodoDescription}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Name *
+              {nameText} *
             </Label>
             <Input 
               id="name" 
@@ -67,13 +68,13 @@ export function NewTodoDialog() {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label className="text-right">
-              Priority *
+              {priorityText} *
             </Label>
             <SelectDemo prevPriority=''/>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="duedate" className="text-right">
-              Due Date
+              {dueDateText} 
             </Label>
             <DatePickerDemo prevDate={undefined}/>
           </div>
@@ -81,7 +82,7 @@ export function NewTodoDialog() {
         <DialogFooter>
           <Button type="submit" onClick={ () => 
             handleSaveTodo(newTodo, dispatch, setOpen)
-          }>Save To-Do</Button>
+          }>{saveTodoText}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

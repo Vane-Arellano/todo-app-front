@@ -7,6 +7,7 @@ import { DataTableFacetedFilter } from "./data-table-filters"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { NewTodoDialog } from "../dialog/new-todo-dialog"
+import { doneText, priorityText, statusText, undoneText } from "@/const/todo-constants"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -17,8 +18,8 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const checkboxOptions = [
-    { label: "Done", value: true },
-    { label: "Undone", value: false },
+    { label: doneText, value: true },
+    { label: undoneText, value: false },
   ]
 
   return (
@@ -37,14 +38,14 @@ export function DataTableToolbar<TData>({
           table.getColumn("done") && (
             <DataTableFacetedFilter
               column={table.getColumn("done")}
-              title="Status"
+              title={statusText}
               options={checkboxOptions}
             />
           )}
           {table.getColumn("priority") && (
             <DataTableFacetedFilter
               column={table.getColumn("priority")}
-              title="Priority"
+              title={priorityText}
               options={priorities} 
             />
           )}

@@ -26,6 +26,7 @@ import PaginationControlsDataTable from "./pagination/pagination"
 import { useState } from "react"
 import { Todo } from "../interfaces/todos"
 import { calculateDueDateClass } from "../handlers/todoTableHandlers"
+import { noResults } from "@/const/todo-constants"
 
 export const TasksTable = ({ data, totalPages, page, totalTodos }:
   { data: Todo[], totalPages: number, page: number, totalTodos: number }) => {
@@ -110,7 +111,7 @@ export const TasksTable = ({ data, totalPages, page, totalTodos }:
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                  {noResults}
                 </TableCell>
               </TableRow>
             )}
