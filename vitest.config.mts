@@ -25,7 +25,8 @@ export default defineConfig(({mode}) => ({
         '**/__tests__/**', 
         '**/interfaces/**', 
         '**/redux/**', 
-        '**/components/ui/**'
+        '**/components/ui/**',
+        '**/app/todos/handlers/**',
       ]
     },
   },

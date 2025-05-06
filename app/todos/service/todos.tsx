@@ -11,11 +11,11 @@ export const getTodos = async (page: number): Promise<any> => {
     try {
         const api_url = process.env.NEXT_PUBLIC_API_URL;
         const response = await fetch(`${api_url}?page=${page}&size=10`);
-        if (!response.ok) throw new Error('Failed to fetch todos');
         const todos = await response.json();
         return todos;
     } catch (error) {
         console.error('Error fetching todos:', error);
+        toast.error('Failed to fetch todos');
         throw error;
     }
 };
@@ -36,7 +36,6 @@ export const createNewTodo = async (newTodo: TodoBodyState): Promise<any> => {
                 'Content-Type': 'application/json',
             },
         });
-        if (!newTodoResponse.ok) throw new Error('Failed to create new todo');
         const todo = await newTodoResponse.json();
         return todo;
     } catch (error) {

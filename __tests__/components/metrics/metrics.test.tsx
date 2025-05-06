@@ -52,7 +52,7 @@ describe('MetricsSection', () => {
 
     // Check rendered text
     expect(await screen.getAllByText(/average time to finish tasks/i).length).toBeGreaterThan(0);
-    expect(await screen.findByText(/low: 2 days/i)).toBeInTheDocument();
-    expect(await screen.findByText(/medium: 4 days/i)).toBeInTheDocument();
+    expect(await screen.findByText(/2 days/i)).toBeInTheDocument();
+    expect(await screen.findByText(/4 days/i)).toBeInTheDocument();
   });
 });

@@ -82,7 +82,7 @@ describe('NewTodoDialog', () => {
         fireEvent.click(screen.getByRole('button', { name: /save to-do/i }));
 
         await waitFor(() => {
-            expect(screen.getByText(/please fill all fields marked with \*/i)).toBeInTheDocument();
+            expect(screen.getByText(/please fill in all fields marked with */i)).toBeInTheDocument();
         });
     });
 

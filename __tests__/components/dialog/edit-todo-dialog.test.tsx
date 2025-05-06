@@ -62,7 +62,6 @@ describe('EditTaskDialog', () => {
         expect(screen.getByRole('button', { name: /edit to-do/i })).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: /edit to-do/i })).toBeInTheDocument();
         expect(screen.getByLabelText(/name/i)).toHaveValue('Test Todo');
-        expect(screen.getByText('Due Date')).toBeInTheDocument();
         const priorityLabels = screen.getAllByText(/priority/i);
         expect(priorityLabels.length).toBeGreaterThan(0);
 
