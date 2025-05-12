@@ -8,36 +8,34 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
   } from "@/components/ui/alert-dialog"
-import { closeDelete, deleteTodoReducer, RootState } from "@/redux/store";
+import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTodo } from "../../service/todos";
+import { handleCloseDelete, handleDeleteTodo } from "../../handlers/confirmDeleteHandlers";
+import { cancel, confirmDelete, confirmDeleteDescription, continueText } from "@/const/todo-constants";
   
   export function AlertDelete() {
     const deleteS = useSelector((state: RootState) => state.delete);
     const dispatch = useDispatch();
 
-    const handleDeleteTodo = async () => {
-      dispatch(deleteTodoReducer(deleteS.id))
-      await deleteTodo(deleteS.id)
-    }
-    const handleCloseDelete = () => {
-        dispatch(closeDelete());
-    }
     return (
-      <AlertDialog open={deleteS.delete} onOpenChange={handleCloseDelete}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              You wont be able to undo this action and recover the task you&apos;re deleting.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteTodo}>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        <AlertDialog open={deleteS.delete}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle data-testid="confirm-delete">{confirmDelete}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {confirmDeleteDescription}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => handleCloseDelete({dispatch})}>{cancel}</AlertDialogCancel>
+              <AlertDialogAction onClick={() =>{
+                 handleDeleteTodo({dispatch, deleteS})
+                 handleCloseDelete({dispatch})
+                }}>{continueText}</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog> 
+    
     )
   }
   

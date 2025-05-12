@@ -1,11 +1,9 @@
 'use client'
 import { useDispatch, useSelector } from "react-redux";
 import  { TasksTable } from "./components/todo-table"
-import { RootState, setTodos, setTotalPages, setTotalTodos } from "@/redux/store";
+import { RootState } from "@/redux/store";
 import { useEffect, useState } from "react";
-import { getTodos } from "./service/todos";
-import { toast } from "sonner";
-import { TodosResponse } from "./interfaces/todos";
+import { fetchTodos } from "./handlers/taskPageHandlers";
 
 export default function TaskPage() {
   const dispatch = useDispatch();
@@ -15,28 +13,12 @@ export default function TaskPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        setLoading(true);
-        const data : TodosResponse = await getTodos(pagination.pageIndex);
-        
-        dispatch(setTodos(data.todos));
-        dispatch(setTotalPages(data.totalPages));
-        dispatch(setTotalTodos(data.totalTodos))
-        setLoading(false); 
-
-      } catch (e) {
-        toast('Somewthing went wrong ' + e);
-      }
-      
-    };
-
-    fetchTodos();
+    fetchTodos({setLoading, pagination, dispatch});
   }, [dispatch, isTodoAdded, pagination]);
 
   if (loading) {
     return (
-      <div className="flex h-screen w-full justify-center items-center">
+      <div className="flex h-screen w-full justify-center items-center" data-testid="task-page">
         <div
           className="text-primary inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
           role="status">
@@ -51,7 +33,7 @@ export default function TaskPage() {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10" data-testid="task-page">
       <TasksTable 
         data={todos} 
         totalPages={pagination.totalPages} 

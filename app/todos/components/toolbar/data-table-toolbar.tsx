@@ -7,6 +7,7 @@ import { DataTableFacetedFilter } from "./data-table-filters"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { NewTodoDialog } from "../dialog/new-todo-dialog"
+import { doneText, priorityText, statusText, undoneText } from "@/const/todo-constants"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -16,11 +17,9 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
-
-  // Define the checkbox filter options
   const checkboxOptions = [
-    { label: "Done", value: true },
-    { label: "Undone", value: false },
+    { label: doneText, value: true },
+    { label: undoneText, value: false },
   ]
 
   return (
@@ -35,21 +34,18 @@ export function DataTableToolbar<TData>({
             }
             className="w-[150px] lg:w-1/2"
           />
-          {/* Checkbox Selection Filter */}
           {
           table.getColumn("done") && (
             <DataTableFacetedFilter
               column={table.getColumn("done")}
-              title="Status"
+              title={statusText}
               options={checkboxOptions}
             />
           )}
-
-          {/* Priority Filter */}
           {table.getColumn("priority") && (
             <DataTableFacetedFilter
               column={table.getColumn("priority")}
-              title="Priority"
+              title={priorityText}
               options={priorities} 
             />
           )}
@@ -66,7 +62,7 @@ export function DataTableToolbar<TData>({
           )}
         </div>
 
-        <div className="flex space-x-2">
+        <div className="flex space-x-2" data-testid="new-todo-dialog">
           <NewTodoDialog />
         </div>
       </div>

@@ -15,10 +15,10 @@ import { Label } from "@/components/ui/label"
 import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from 'react-redux';
-import { addTodo, restartTodoValues, RootState, triggerTodoAdded } from "@/redux/store";
+import { RootState } from "@/redux/store";
 import { placeName } from "@/redux/store"
-import { createNewTodo } from "../../service/todos"
-import { toast } from "sonner"
+import { handleSaveTodo } from "../../handlers/newTodoDialogHandlers"
+import { dueDateText, nameText, newTodoDescription, newTodoText, priorityText, saveTodoText } from "@/const/todo-constants"
 
 export function NewTodoDialog() {
   const [name, setName] = useState(''); 
@@ -30,76 +30,59 @@ export function NewTodoDialog() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedName(name);  // Update the debounced name
-    }, 500);  // 500ms debounce
+      setDebouncedName(name);  
+    }, 500);  
 
-    return () => clearTimeout(timer);  // Cleanup the previous timeout
+    return () => clearTimeout(timer);  
   }, [name]);
 
   useEffect(() => {
     if (debouncedName) {
-      dispatch(placeName(debouncedName));  // Dispatch only after debouncing
+      dispatch(placeName(debouncedName));  
     }
   }, [debouncedName, dispatch]);
 
-  const handleSaveTodo = async () => {
-    if (newTodo.name != '' && newTodo.priority != ''){
-      try {
-        const todo = await createNewTodo(newTodo)
-        dispatch(addTodo(todo))
-        dispatch(triggerTodoAdded())
-        setOpen(false)
-        dispatch(restartTodoValues());
-
-      }
-      catch (error) {
-        toast("Something went wrong, please try again" + error)
-      }
-      
-    }
-    else {
-      toast("Please fill all fields marked with *")
-    }
-  }
-
   return (
-    <Dialog open={open} onOpenChange={() => {setOpen(!open)}} >
+    <Dialog open={open} onOpenChange={() => {setOpen(!open)}}>
       <DialogTrigger asChild>
         <Button onClick={() => {setOpen(true)}}><Plus/> New To-Do</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>New To-Do</DialogTitle>
+          <DialogTitle>{newTodoText}</DialogTitle>
           <DialogDescription>
-            Create a new To-Do task
+            {newTodoDescription}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Name *
+              {nameText} *
             </Label>
             <Input 
               id="name" 
+              data-testid="name"
               value={name} 
               onChange={(e) => setName(e.target.value)} 
               placeholder="Task 1" className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Priority *
+            <Label className="text-right">
+              {priorityText} *
             </Label>
             <SelectDemo prevPriority=''/>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="duedate" className="text-right">
-              Due Date
+              {dueDateText} 
             </Label>
             <DatePickerDemo prevDate={undefined}/>
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleSaveTodo}>Save To-Do</Button>
+          <Button type="submit" onClick={ () => 
+            handleSaveTodo(newTodo, dispatch, setOpen)
+          }>{saveTodoText}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

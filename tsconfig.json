@@ -25,9 +25,10 @@
       "@types/babel__core",
       "@types/babel__generator",
       "@types/babel__template",
-      "@types/babel__traverse"
+      "@types/babel__traverse", 
+      "vitest/globals"
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "vitest.config.mts"],
   "exclude": ["node_modules"]
 }
